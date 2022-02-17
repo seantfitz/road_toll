@@ -3,10 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width:device-width, initial-scale=1" />
-	<title>Road Toll</title>
+	<title>D3JS chart test</title>
 	<!-- <script src="../offline/d3.v7.min.js"></script> -->
 	<script src="https://d3js.org/d3.v7.min.js" defer></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js" defer></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js" defer></script> -->
 
 	<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
 
@@ -206,6 +206,19 @@
 			background-color: #efefef;
 			padding: 10px;
 		}
+
+		#content div{
+			/*position: absolute;*/
+
+		}
+
+		#state_head{
+			/*position: absolute;*/
+			/*top: 30px;*/
+			/*left: 10px;*/
+
+			/*margin: -30px 0 0 10px;*/
+		}
 	</style>
 </head>
 <body>
@@ -235,15 +248,17 @@
 		<div id="content">
 
 			<div>
+				<!-- <div id="state_head">State and Year</div> -->
+				<!-- <div id="lga_head"></div> -->
 				<svg class="d3-container" id="states"></svg>
 				<svg class="d3-container" id="lga"></svg>
 			</div>
 
 			<div>
 				<div id="txt">
-					<div class="subhead" id="locality_heading">Burwood NSW 2018</div>
-					<div class="line" id="total">TOTAL: 999</div>
-					<div class="line" id="total">TOTAL: 999</div>
+					<div class="subhead" id="locality_heading"></div>
+					<div class="line" id="total"></div>
+					<div class="line" id="hols"></div>
 				</div>
 
 				<div id="age_group_div">
@@ -252,6 +267,13 @@
 				</div>
 
 				<div id="donuts">
+					More content to be added here.
+					<br>
+					<br>
+					Day/Night, Weekday/Weekend & Gender.
+					<br>
+					
+					All in doghnut charts as above.
 					<svg id="dn"></svg>
 					<svg id="we"></svg>
 					<svg id="gn"></svg>

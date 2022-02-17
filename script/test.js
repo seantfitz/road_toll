@@ -16,12 +16,12 @@ const getQueryParams = (qs)=>{
 //query string parameters as a variable
 let query = getQueryParams(document.location.search)
 
-let selected_state = 'ACT'
+let selected_state = 'NSW'
 if(query['state']){
 	selected_state = query['state']
 }
 
-let selected_lga = 'Adelaide (C)'
+let selected_lga = 'Inner West'
 if(query['lga']){
 	selected_lga = query['lga']
 }
@@ -383,7 +383,7 @@ const doSomething = ()=>{
 			master.lga[LGA].years[Year] = {
 				year:Year,
 				total:add(Crash_ID != ''),
-
+state:State,
 				christmas:add(Christmas == 'Yes'),
 				easter:add(Easter == 'Yes'),
 				
@@ -511,6 +511,14 @@ const doSomething = ()=>{
 
 doSomething()
 
+const parentheses = (str)=>{
+	if(str.indexOf(' (') >= 0){
+		return str.substring(0,str.indexOf(' ('))
+	}else{
+		return str
+	}
+}
+
 const lga_list = ()=>{
 	let d = Object.keys(master.lga).sort();
 
@@ -518,12 +526,17 @@ const lga_list = ()=>{
 	.select('#lga_list')
 	.on('change', (e)=>{
 		make_chart(e.target.value)
+		selected_lga = e.target.value
+		selected_state = master.lga[e.target.value].state
+		make_chart_state(selected_state,selected_year)
 	})
 	.selectAll('option')
 	.data(d)
 	.enter()
 	.append('option')
-	.text(d => `${d}, ${master.lga[d].state}`)
+	// .text(d => `${d}, ${master.lga[d].state}`)
+	// .text(d => `${d}, ${parentheses(master.lga[d].state)}`)
+	.text(d => `${parentheses(d)}, ${master.lga[d].state}`)
 	.attr('value',d => d)
 
 	const setList = d3
@@ -600,6 +613,17 @@ const round_up = (n)=>{
 
 const make_chart_state = (sel,yr)=>{
 
+	/*reset to main*/
+	d3.selectAll('.bar.selected').classed('selected',false)
+	d3.selectAll('.bar').classed('unselected',false)
+
+	d3.select('#locality_heading').html(`${selected_state} - ${selected_year}`)
+	d3.select('#total').html(`Total: ${master.state[selected_state].years[selected_year].total}`)
+	d3.select('#hols').html(`Christmas: ${master.state[selected_state].years[selected_year].christmas} - Easter: ${master.state[selected_state].years[selected_year].easter}`)
+
+	age_group_chart(master.state[selected_state].years[selected_year].age_group)
+	/*reset to main*/
+
 	let margin = {
 		top: 60,
 		right: 30,
@@ -674,17 +698,27 @@ const make_chart_state = (sel,yr)=>{
 		// 	age_group_chart(master.state[selected_state].years[selected_year].age_group)
 		// })
 		.on('click',(d,i)=>{
-			console.log(d3.select(d.target).classed('selected'))
+			//select and deselect a month
+			// console.log(d3.select(d.target).classed('selected'))
 			
 			if(d3.select(d.target).classed('selected')){
-				d3.selectAll('#states .bar').classed('unselected',false)
+				d3.selectAll('.bar').classed('unselected',false)
 				d3.select(d.target).classed('selected',false)
 				age_group_chart(master.state[selected_state].years[selected_year].age_group)
+
+				d3.select('#locality_heading').html(`${selected_state} - ${selected_year}`)
+				d3.select('#total').html(`Total: ${master.state[selected_state].years[selected_year].total}`)
+				d3.select('#hols').html(`Christmas: ${master.state[selected_state].years[selected_year].christmas} - Easter: ${master.state[selected_state].years[selected_year].easter}`)
 			}else{
-				d3.selectAll('#states .bar.selected').classed('selected',false)
-				d3.selectAll('#states .bar').classed('unselected',true)
+				d3.selectAll('.bar.selected').classed('selected',false)
+				d3.selectAll('.bar').classed('unselected',true)
 				d3.select(d.target).classed('selected',true)
 				age_group_chart(i.age_group)
+
+				d3.select('#locality_heading').html(`${selected_state} - ${i.month} ${selected_year}`)
+				d3.select('#total').html(`Total: ${i.total}`)
+				// d3.select('#hols').html(`Christmas: ${i.christmas} - Easter: ${i.easter}`)
+				d3.select('#hols').html(``)
 			}
 		})
 
@@ -715,9 +749,30 @@ const make_chart_state = (sel,yr)=>{
 			.tickFormat(d3.format('d'))
 		)
 		.classed('axisY',true)
+
+	const heading = chart
+		.selectAll('.heading')
+		.data([{a:1}])
+		.enter()
+		.append('text')
+		.classed('heading',true)
+		.text(`${selected_state} - ${selected_year}`)
+		.attr('transform','translate(-20,-20)')
 }
 
 const make_chart = (sel)=>{
+
+	/*reset to main*/
+	d3.selectAll('.bar.selected').classed('selected',false)
+	d3.selectAll('.bar').classed('unselected',false)
+
+	d3.select('#locality_heading').html(`${selected_state} - ${selected_year}`)
+	d3.select('#total').html(`Total: ${master.state[selected_state].years[selected_year].total}`)
+	d3.select('#hols').html(`Christmas: ${master.state[selected_state].years[selected_year].christmas} - Easter: ${master.state[selected_state].years[selected_year].easter}`)
+
+	age_group_chart(master.state[selected_state].years[selected_year].age_group)
+	/*reset to main*/
+
 	let margin = {
 		top: 60,
 		right: 30,
@@ -771,9 +826,33 @@ const make_chart = (sel)=>{
 		.attr('height', data => height - yScale(data.total))
 		.attr('x', data => xScale(data.year))
 		.attr('y', data => yScale(data.total))
-		.on('mouseover',(d,i)=>{
-			console.log(i)
-			console.log(i)
+		// .on('mouseover',(d,i)=>{
+		// 	console.log(i)
+		// 	console.log(i)
+		// })
+		.on('click',(d,i)=>{
+			//select and deselect an LGA year
+			// console.log(d3.select(d.target).classed('selected'))
+			
+			if(d3.select(d.target).classed('selected')){
+				d3.selectAll('.bar').classed('unselected',false)
+				d3.select(d.target).classed('selected',false)
+				age_group_chart(master.state[selected_state].years[selected_year].age_group)
+
+				d3.select('#locality_heading').html(`${selected_state} - ${selected_year}`)
+				d3.select('#total').html(`Total: ${master.state[selected_state].years[selected_year].total}`)
+				d3.select('#hols').html(`Christmas: ${master.state[selected_state].years[selected_year].christmas} - Easter: ${master.state[selected_state].years[selected_year].easter}`)
+			}else{
+				d3.selectAll('.bar.selected').classed('selected',false)
+				d3.selectAll('.bar').classed('unselected',true)
+				d3.select(d.target).classed('selected',true)
+				age_group_chart(i.age_group)
+// console.log(i)
+				d3.select('#locality_heading').html(`${parentheses(selected_lga)}, ${i.state} - ${i.year}`)
+				d3.select('#total').html(`Total: ${i.total}`)
+				d3.select('#hols').html(`Christmas: ${i.christmas} - Easter: ${i.easter}`)
+				// d3.select('#hols').html(``)
+			}
 		})
 
 	const labels = chart
@@ -803,5 +882,16 @@ const make_chart = (sel)=>{
 			.tickFormat(d3.format('d'))
 		)
 		.classed('axisY',true)
+
+
+	const heading = chart
+		.selectAll('.heading')
+		.data([{a:1}])
+		.enter()
+		.append('text')
+		.classed('heading',true)
+		.text(`${parentheses(sel)}, ${master.lga[sel].state} - ${keys[0]} to ${keys[keys.length - 1]}`)
+		.attr('transform','translate(-20,-20)')
+
 }
 
