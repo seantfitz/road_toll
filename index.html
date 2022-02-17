@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width:device-width, initial-scale=1" />
+	<title>D3JS chart test</title>
+	<!-- <script src="../offline/d3.v7.min.js"></script> -->
+	<script src="https://d3js.org/d3.v7.min.js" defer></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js" defer></script>
+
+	<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+
+	<style type="text/css">
+		body{
+			margin: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: #ddd;
+			height: 100vh;
+
+			font-family: 'Gilroy';
+		}
+		main{
+			width: 850px;
+			height: 580px;
+			padding: 10px;
+			background-color: #fff;
+			overflow: hidden;
+		}
+
+		#headrow, #content{
+		/*#headrow{*/
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		#headrow{
+			height: 40px;
+			/*background-color: #efefef;*/
+			margin: 0 0 10px;
+			border-bottom: solid 1px #ccc;
+		}
+		#heading{
+			font-size: 1.4em;
+		}
+
+		#headnav{
+			display: flex;
+		}
+
+		#content{
+			/*flex-grow: 1;*/
+			/*height: 100%;*/
+			/*height: inherit;*/
+			align-items: flex-start;
+		}
+
+
+		/**********************************/
+		.dropdown{
+			position: relative;
+			border-left: 1px solid #1f1f1f;
+			padding: 0 10px;
+			cursor: pointer;
+		}
+		.dropdown:nth-child(1){
+			border: unset;
+		}
+		.dropdown button{
+			background-color: unset;
+			border: unset;
+			-webkit-transition: color 0.3s;
+			transition: color 0.3s;
+		}
+
+		.dropdown:hover button{
+			color: #de2508;
+		}
+		
+
+		/**************************/
+
+		select{
+			position: absolute;
+
+			top: 0px;
+			right: 0px;
+			bottom: 0px;
+			left: 0px;
+
+			background-color: unset;
+			color: transparent;
+			border: unset;
+			outline: none;
+			-moz-appearance: none;
+			-webkit-appearance: none;
+		}
+
+
+
+
+
+		/**************************/
+		.d3-container{
+			background-color: #efefef;
+			/*margin: 10px;*/
+			/*margin: 10px 10px 0 0;*/
+			margin: 0 0 10px 0;
+
+			/*width: 1200px;*/
+			/*height: 500px;*/
+		}
+		.bar{
+			fill: #f00;
+			/*transition: fill 0.25s ease;*/
+			cursor: pointer;
+
+			opacity: 0.6;
+			transition: opacity 0.5s ease;
+		}
+		.bar.unselected{
+			opacity: 0.4;
+		}
+		.bar:hover{
+			/*fill: #fc0;*/
+			opacity: 0.8;
+		}
+		.bar.selected, .bar.selected:hover{
+			/*fill: #0f0;*/
+			opacity: 1;
+		}
+		
+
+
+
+
+
+		.redundant{
+			fill: #000;
+		}
+		.label{
+			/*width: 10px;*/
+			/*height: 10px;*/
+			/*fill: #ff0;*/
+			text-align: center;
+		}
+
+
+		/*donut*/
+		.seg{
+			opacity: 0.8;
+			transition: opacity 0.25s ease;
+		}
+		.seg:hover{
+			opacity: 1;
+		}
+		.mid{
+			font-size: 2em;
+			/*baseline-shift: -0.5em;*/
+			/*display: block;*/
+		}
+		/*donut*/
+
+
+		svg{
+			display: block;
+		}
+
+
+
+
+		#txt{
+			/*width: 340px;*/
+			/*height: 110px;*/
+			width: 320px;
+			height: 90px;
+			margin: 0 0 10px;
+			background-color: #efefef;
+			padding: 10px;
+		}
+		.subhead{
+			font-size: 1.2em;
+		}
+
+		#age_group_div{
+			background-color: #efefef;
+			/*width: 340px;*/
+			/*height: 200px;*/
+			width: 320px;
+			height: 180px;
+			padding: 10px;
+		}
+		.subhead{
+			height: 29px;
+			margin: 0 0 10px;
+			border-bottom: solid 1px #ccc;
+		}
+		.line{
+			height: 30px;
+		}
+		#donuts{
+			width: 320px;
+			height: 180px;
+			margin: 10px 0 0;
+			background-color: #efefef;
+			padding: 10px;
+		}
+	</style>
+</head>
+<body>
+
+	<main>
+
+		<div id="headrow">
+			<div id="heading">Road Toll</div id="heading">
+			<div id="headnav">
+
+
+				<div class="dropdown">
+					<button name="state_list">State / Territory</button>
+					<select id="state_list" size="0"></select>
+				</div>
+				<div class="dropdown">
+					<button name="year_list">Year</button>
+					<select id="year_list" size="0"></select>
+				</div>
+				<div class="dropdown">
+					<button name="lga_list">LGA</button>
+					<select id="lga_list" size="0"></select>
+				</div>		
+			</div>
+		</div>
+		
+		<div id="content">
+
+			<div>
+				<svg class="d3-container" id="states"></svg>
+				<svg class="d3-container" id="lga"></svg>
+			</div>
+
+			<div>
+				<div id="txt">
+					<div class="subhead" id="locality_heading">Burwood NSW 2018</div>
+					<div class="line" id="total">TOTAL: 999</div>
+					<div class="line" id="total">TOTAL: 999</div>
+				</div>
+
+				<div id="age_group_div">
+					<div class="line">Age Group</div>
+					<svg id="age_group"></svg>
+				</div>
+
+				<div id="donuts">
+					<svg id="dn"></svg>
+					<svg id="we"></svg>
+					<svg id="gn"></svg>
+				</div>
+				
+			</div>
+		</div>
+
+		
+	</main>
+
+	<script type="text/javascript">
+		// d3.selectAll('.dropdwon button').on('mouseover',(e)=>{
+		// 	console.log(e.target)
+		// })
+	</script>
+	
+	
+	<script src="script/age_group.js" defer></script>
+	<script src="script/test.js" defer></script>
+	
+</body>
+</html>
