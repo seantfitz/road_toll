@@ -160,6 +160,9 @@
 			/*baseline-shift: -0.5em;*/
 			/*display: block;*/
 		}
+		.donut .mid{
+			font-size: 1.4em;
+		}
 		/*donut*/
 
 
@@ -205,6 +208,9 @@
 			margin: 10px 0 0;
 			background-color: #efefef;
 			padding: 10px;
+
+			display: flex;
+			justify-content: space-between;
 		}
 
 		#content div{
@@ -219,6 +225,16 @@
 
 			/*margin: -30px 0 0 10px;*/
 		}
+
+		button, select{
+			cursor: pointer;
+		}
+
+		*{
+			-webkit-user-select: none; /* Safari */
+			-ms-user-select: none; /* IE 10 and IE 11 */
+			user-select: none; /* Standard syntax */
+		}
 	</style>
 </head>
 <body>
@@ -231,8 +247,16 @@
 
 
 				<div class="dropdown">
+					<button id="national">National</button>
+				</div>
+
+				<div class="dropdown">
 					<button name="state_list">State / Territory</button>
-					<select id="state_list" size="0"></select>
+					<select id="state_list" size="0">
+						<!-- <option disabled="true" hidden="true" value="national">.</option> -->
+						<!-- <option hidden="true" value="national">.</option> -->
+						<option value="national">National</option>
+					</select>
 				</div>
 				<div class="dropdown">
 					<button name="year_list">Year</button>
@@ -267,13 +291,6 @@
 				</div>
 
 				<div id="donuts">
-					More content to be added here.
-					<br>
-					<br>
-					Day/Night, Weekday/Weekend & Gender.
-					<br>
-					
-					All in doghnut charts as above.
 					<svg id="dn"></svg>
 					<svg id="we"></svg>
 					<svg id="gn"></svg>
@@ -291,9 +308,11 @@
 		// })
 	</script>
 	
-	
+	<script src="script/national.js" defer></script>
+	<script src="script/donuts.js" defer></script>
 	<script src="script/age_group.js" defer></script>
 	<script src="script/test.js" defer></script>
+	
 	
 </body>
 </html>
