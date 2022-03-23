@@ -1,5 +1,7 @@
 let _margin = 0
+// let _margin = [30,0,0,0]
 let _height = 150// - _margin.top - _margin.bottom;
+// let _height = 180// - _margin.top - _margin.bottom;
 let _width = 340// - _margin.left - _margin.right;
 
 let colours = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]
@@ -15,8 +17,20 @@ let cols = [
 ]
 
 const age_group_chart = (data)=>{
-// console.log(data)
+
+	let keys = Object.keys(data)
+	// console.log(keys)
+	for(i of keys){
+		if(data[i] == 0){
+			delete data[i]
+		}
+	}
+
+	keys = Object.keys(data)
+	// console.log(keys)
+	// console.log(data)
 	const radius = Math.min(_width, _height) / 2 - _margin
+	// const radius = Math.min(_width, _height) / 2 - Math.max(...(_margin))
 
 	// set the color scale
 	const color = d3.scaleOrdinal()
@@ -39,6 +53,7 @@ const age_group_chart = (data)=>{
 
 	const chart = container.append("g")
 		.attr("transform", `translate(${radius},${radius})`);
+		// .attr("transform", `translate(${radius},${radius + _margin[0]})`);
 
 	// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
 	const segments = chart
@@ -70,14 +85,39 @@ const age_group_chart = (data)=>{
 		.attr('y','0.35em')
 		// .text(master.state[sel].years[yyyy].total)
 
+	// const heading = chart
+	// 	.selectAll('.heading')
+	// 	.data([0])
+	// 	.enter()
+	// 	.append('text')
+	// 	.classed('heading',true)
+	// 	.attr('text-anchor','middle')
+	// 	.attr('x',0)
+	// 	.attr('y',0)
+	// 	.text('Age Group')
+
+	const legendContainer = chart
+		.selectAll('.legendContainer')
+		.data([0])
+		.enter()
+		.append('g')
+		.classed('legendConrtainer',true)
+		// .attr('transform',`translate(${radius + 10},${0})`)
+		.attr('transform',`translate(${radius + 10},${
+			- ((keys.length / 2) * 20)
+		})`)
+
 	/*legend*/
 	// again rebind for legend
-	const legendG = container
+	// const legendG = container
+	const legendG = legendContainer
 		.selectAll('.legend')
 		.data(data_ready)
 		.enter()
 		.append('g')
-		.attr('transform',(d,i) => (`translate(${radius * 2 + 10},${i * 20 + 10})`))
+		// .attr('transform',(d,i) => (`translate(${radius * 2 + 10},${i * 20 + 10})`))
+		// .attr('transform',(d,i) => (`translate(${0},${i * 20 + 10})`))
+		.attr('transform',(d,i) => (`translate(${0},${i * 20})`))
 		.classed('legend',true)
 
 	legendG.append("rect") // make a matching color rect

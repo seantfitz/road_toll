@@ -1,3 +1,11 @@
+let em = parseFloat(
+	getComputedStyle(
+		document.querySelector('body')
+	)['font-size']
+)
+console.log(em)
+
+
 const donut = (data,id,head,cols)=>{
 // console.log(id)
 	let keys = Object.keys(data)
@@ -65,7 +73,7 @@ const donut = (data,id,head,cols)=>{
 
 	const heading = chart
 		.selectAll('.heading')
-		.data([{a:'aa'}])
+		.data([0])
 		.enter()
 		.append('text')
 		.classed('heading',true)
@@ -74,14 +82,33 @@ const donut = (data,id,head,cols)=>{
 		.attr('y', - radius - mrgn[0] / 2)
 		.text(head)
 
-	const legendG = container
+	const legendContainer = chart
+		.selectAll('.legendContainer')
+		.data([0])
+		.enter()
+		// .append('text')
+		.append('g')
+		.classed('legendContainer',true)
+		.attr('transform',`translate(${
+			- radius + 10
+		},${
+			radius
+		})`)
+		// .text('aaaaa')
+
+
+	// const legendG = container
+	const legendG = legendContainer
 		.selectAll('.legend')
 		.data(data_ready)
 		.enter()
 		.append('g')
 		// .attr('transform',(d,i) => (`translate(${10},${i * 16 + 10 + (radius * 2)})`))
 		// .attr('transform',(d,i) => (`translate(${10},${i * 16 + 10 + mrgn[0] / 2 + (radius * 2)})`))
-		.attr('transform',(d,i) => (`translate(${10},${i * 16 + mrgn[0] + (radius * 2)})`))
+		// .attr('transform',(d,i) => (`translate(${10},${i * 16 + mrgn[0] + (radius * 2)})`))
+		// .attr('transform',(d,i) => (`translate(${10},${i * em + mrgn[0] + (radius * 2)})`))
+		
+		.attr('transform',(d,i) => (`translate(${0},${i * em})`))
 		.classed('legend',true)
 
 	legendG.append("rect") // make a matching color rect

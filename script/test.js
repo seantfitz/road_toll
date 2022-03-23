@@ -16,6 +16,10 @@ const getQueryParams = (qs)=>{
 //query string parameters as a variable
 let query = getQueryParams(document.location.search)
 
+let wpl = window.parent.location;
+console.log(wpl)
+console.log(wpl.href)
+
 let selected_state = 'NSW'
 if(query['state']){
 	selected_state = query['state']
@@ -659,7 +663,7 @@ const make_chart_state = (sel,yr,secondary)=>{
 			max = obj[i].total
 		}
 	}
-
+console.log(d)
 	const xScale = d3
 		.scaleBand()
 		.domain(d.map((dataPoint) => dataPoint.month))
