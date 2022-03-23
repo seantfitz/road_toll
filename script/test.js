@@ -663,7 +663,7 @@ const make_chart_state = (sel,yr,secondary)=>{
 			max = obj[i].total
 		}
 	}
-console.log(d)
+// console.log(d)
 	const xScale = d3
 		.scaleBand()
 		.domain(d.map((dataPoint) => dataPoint.month))
@@ -995,3 +995,5 @@ doSomething();
 
 let url = (window.location != window.parent.location)? document.referrer: document.location.href;
 console.log(url)
+console.log(document.referrer)
+console.log(document.location)
