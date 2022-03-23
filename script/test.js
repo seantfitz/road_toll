@@ -16,9 +16,9 @@ const getQueryParams = (qs)=>{
 //query string parameters as a variable
 let query = getQueryParams(document.location.search)
 
-let wpl = window.parent.location;
-console.log(wpl)
-console.log(wpl.href)
+// let wpl = window.parent.location;
+// console.log(wpl)
+// console.log(wpl.href)
 
 let selected_state = 'NSW'
 if(query['state']){
@@ -987,3 +987,11 @@ const make_chart = (sel)=>{
 
 
 doSomething();
+
+
+// let wpl = window.parent.location;
+// console.log(wpl)
+// console.log(wpl.href)
+
+let url = (window.location != window.parent.location)? document.referrer: document.location.href;
+console.log(url)
